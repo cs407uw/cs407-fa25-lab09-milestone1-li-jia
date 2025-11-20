@@ -23,7 +23,7 @@ class Ball(
     private var isFirstUpdate = true
 
     init {
-        // TODO: Call reset()
+        reset()// TODO: Call reset()
     }
 
     /**
@@ -37,7 +37,26 @@ class Ball(
             accY = yAcc
             return
         }
+        val a0x = accX
+        val a1x = xAcc
+        val a0y = accY
+        val a1y = yAcc
 
+        val dx = velocityX * dT + (3f * a0x + a1x) * dT * dT / 6f
+        val dy = velocityY * dT + (3f * a0y + a1y) * dT * dT / 6f
+
+        posX += dx
+        posY += dy
+
+        velocityX += 0.5f * (a0x + a1x) * dT
+        velocityY += 0.5f * (a0y + a1y) * dT
+
+
+        accX = a1x
+        accY = a1y
+
+
+        checkBoundaries()
     }
 
     /**
@@ -46,7 +65,31 @@ class Ball(
      * boundary should be set to 0.
      */
     fun checkBoundaries() {
-        // TODO: implement the checkBoundaries function
+        val minX = 0f
+        val maxX = backgroundWidth - ballSize
+        val minY = 0f
+        val maxY = backgroundHeight - ballSize
+
+        if (posX < minX) {
+            posX = minX
+            velocityX = 0f
+            accX = 0f
+        }
+        if (posX > maxX) {
+            posX = maxX
+            velocityX = 0f
+            accX = 0f
+        }
+        if (posY < minY) {
+            posY = minY
+            velocityY = 0f
+            accY = 0f
+        }
+        if (posY > maxY) {
+            posY = maxY
+            velocityY = 0f
+            accY = 0f
+        } // TODO: implement the checkBoundaries function
         // (Check all 4 walls: left, right, top, bottom)
     }
 
@@ -55,7 +98,14 @@ class Ball(
      * velocity and acceleration.
      */
     fun reset() {
-        // TODO: implement the reset function
+        posX = backgroundWidth / 2f - ballSize / 2f
+        posY = backgroundHeight / 2f - ballSize / 2f
+        velocityX = 0f
+        velocityY = 0f
+        accX = 0f
+        accY = 0f
+        isFirstUpdate = true
+         // TODO: implement the reset function
         // (Reset posX, posY, velocityX, velocityY, accX, accY, isFirstUpdate)
     }
 }
